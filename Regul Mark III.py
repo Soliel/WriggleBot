@@ -48,4 +48,4 @@ async def reload(extension_name : str):
 	await bot.say('{} Reloaded.'.format(extension_name));
 
 
-bot.run("MjA5NzM5MTkwMjQ0NDc0ODgx.CoEmVw.-WCPxVNNpp7RJFs1rI5ZgH99QdU")
+bot.run("token")
