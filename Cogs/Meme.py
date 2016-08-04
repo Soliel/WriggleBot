@@ -7,7 +7,7 @@ class Meme():
 
     @commands.command()
     async def wes(self):
-        self.bot.say("https://discordcdn.com/attachments/180131069960519680/210620976814227456/Take_me_to_flavour_town.jpg")
+        await self.bot.say("http://i.imgur.com/9E9jPJa.jpg")
 
 def setup(bot):
     bot.add_cog(Meme(bot))
