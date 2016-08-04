@@ -2,6 +2,7 @@ from discord.ext import commands
 
 description = "A bot to begin Regul's reign of tyranny over the servers."
 
+startup_extensions = ["Cogs.Reversal", "Cogs.PetSys", "Cogs.Meme"]
 
 bot = commands.Bot(command_prefix='~', description = description)
 
