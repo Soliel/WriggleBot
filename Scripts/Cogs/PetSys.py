@@ -10,7 +10,7 @@ class PetSys():
 
 	@commands.command(pass_context = True)
 	async def adopt(self, ctx, arg : str ):
-		conn = sqlite3.connect('Regul.db')
+		conn = sqlite3.connect('Data/Regul.db')
 		cur = conn.cursor()
 		owned = False
 		cur.execute("SELECT owner, pet FROM PetTable")
@@ -34,7 +34,7 @@ class PetSys():
 			
 	@commands.command(pass_context=True)
 	async def pets(self, ctx):
-		conn = sqlite3.connect('Regul.db')
+		conn = sqlite3.connect('Data/Regul.db')
 		cur = conn.cursor()
 		cur.execute("SELECT owner, pet FROM PetTable")
 		haspets = False;
@@ -51,7 +51,7 @@ class PetSys():
 			
 	@commands.command(pass_context=True)
 	async def abandon(self, ctx, arg:str):
-		conn = sqlite3.connect('Regul.db')
+		conn = sqlite3.connect('Data/Regul.db')
 		cur = conn.cursor()
 		cur.execute("SELECT owner, pet FROM PetTable")
 		for row in cur.fetchall():
@@ -69,7 +69,7 @@ class PetSys():
 				
 	
 def setup(bot):
-	conn = sqlite3.connect('Regul.db')
+	conn = sqlite3.connect('Data/Regul.db')
 	cur = conn.cursor()
 	cur.execute("CREATE TABLE IF NOT EXISTS PetTable(time REAL, owner TEXT, pet TEXT)")
 	cur.close()

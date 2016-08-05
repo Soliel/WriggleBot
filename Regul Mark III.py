@@ -1,10 +1,11 @@
 from discord.ext import commands
+import discord
 
 description = "A bot to begin Regul's reign of tyranny over the servers."
 
-startup_extensions = ["Cogs.Reversal", "Cogs.PetSys", "Cogs.Meme"]
+startup_extensions = ["Scripts.Cogs.Reversal", "Scripts.Cogs.PetClaim", "Scripts.Cogs.Meme"]
 
-bot = commands.Bot(command_prefix='~', description = description)
+bot = commands.Bot(command_prefix='t~', description = description)
 
 @bot.event
 async def on_ready():
