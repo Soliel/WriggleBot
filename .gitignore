@@ -60,3 +60,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+WriggleBot.pyperf
+.vs/WriggleBot/v14/.suo
