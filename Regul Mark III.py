@@ -3,7 +3,7 @@ import discord
 
 description = "A bot to begin Regul's reign of tyranny over the servers."
 
-startup_extensions = ["Scripts.Cogs.Reversal", "Scripts.Cogs.PetClaim", "Scripts.Cogs.Meme"]
+startup_extensions = ["Scripts.Cogs.Reversal", "Scripts.Cogs.PetClaim", "Scripts.Cogs.Meme", "Scripts.Cogs.PetBattle"]
 
 bot = commands.Bot(command_prefix='t~', description = description)
 
