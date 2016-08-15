@@ -3,9 +3,10 @@ import discord
 
 description = "A bot to begin Regul's reign of tyranny over the servers."
 
-startup_extensions = ["Scripts.Cogs.Reversal", "Scripts.Cogs.PetClaim", "Scripts.Cogs.Meme", "Scripts.Cogs.PetBattle"]
+startup_extensions = ["Scripts.Cogs.Reversal", "Scripts.Cogs.PetClaim", "Scripts.Cogs.Meme", "Scripts.Cogs.PetBattle", "Scripts.Cogs.PetStats"]
 
-bot = commands.Bot(command_prefix='t~', description = description)
+
+bot = commands.Bot(command_prefix='bwrig ', description = description)
 
 @bot.event
 async def on_ready():
@@ -49,4 +50,4 @@ async def reload(extension_name : str):
 	await bot.say('{} Reloaded.'.format(extension_name));
 
 
-bot.run("token")
+bot.run("MjEwNTU3NjQ5ODE5OTI2NTMx.CoRrpw.XfSfukjWI1bJtwmGs8LiqtXtkvk")

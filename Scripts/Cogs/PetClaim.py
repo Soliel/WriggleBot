@@ -1,6 +1,7 @@
 import discord
 import sqlalchemy
 from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
 from Scripts.DataPy.DataObjects import Base, Pet, Owner
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -17,7 +18,8 @@ class PetClaim():
         self.session = self.DBSession()
     
     adoptions = {}
-
+    
+    @commands.cooldown(1, 30, BucketType.user)
     @commands.group(pass_context=True, invoke_without_command=True)
     async def adopt(self, ctx, arg : discord.User):
         try:
@@ -44,7 +46,7 @@ class PetClaim():
 
         else:
             self.adoptions[arg.id] = ctx.message.author.id
-            await self.bot.say(arg.mention + " Do you accept the adoption? if so type ``~adopt accept``, ``~adopt decline`` otherwise.") 
+            await self.bot.say(arg.name + " Do you accept the adoption? if so type ``wrig adopt accept``, ``wrig adopt decline`` otherwise.") 
 
     @adopt.command(name='accept', pass_context=True)
     async def _accept(self, ctx):
@@ -66,7 +68,7 @@ class PetClaim():
             pet = None
 
         if not owner:
-            new_owner = Owner(OwnerID = oID, PetAmount = 1, Level = 1, OwnerFriendlyName = discord.utils.get(ctx.message.server.members, id=oID).name, ServerID = ctx.message.server.id)
+            new_owner = Owner(OwnerID = oID, PetAmount = 1, Level = 1, Experience = 0, OwnerFriendlyName = discord.utils.get(ctx.message.server.members, id=oID).name, ServerID = ctx.message.server.id)
             self.session.add(new_owner)
             self.session.commit()
         else:
@@ -74,9 +76,10 @@ class PetClaim():
             self.session.commit()
         if pet == None: 
             new_pet = Pet(PetID = ctx.message.author.id, PetFriendlyName = ctx.message.author.name, ServerID = ctx.message.server.id,
-                          AttribATK = 10, AttribDEF = 10, AttribHP = 20,
-                          AttribLCK = .01, AttribACC = .8, AttribEVA = .05,
-                          Level = 0, OwnerID = oID)
+                          AttribATK = 10, AttribDEF = 10, AttribHP = 20, AttribPTS = 0, AttribATKPTS = 0, AttribACCPTS = 0,
+                          AttribLCK = .01, AttribACC = .8, AttribEVA = .05, AttribHPPTS = 0, AttribLCKPTS = 0, 
+                          Level = 0, Experience = 0, OwnerID = oID,  AttribDEFPTS = 0, AttribEVAPTS = 0)
+            
             self.session.add(new_pet)
             self.session.commit()
         
@@ -85,7 +88,7 @@ class PetClaim():
             self.session.commit()
 
         del self.adoptions[ctx.message.author.id]
-        await self.bot.say("<@{0}> has been adopted by <@{1}>!".format(ctx.message.author.id, oID))
+        await self.bot.say("{0} has been adopted by <@{1}>!".format(ctx.message.author.name, oID))
         
     @adopt.command(name="decline", pass_context=True)
     async def _decline(self, ctx):
@@ -119,7 +122,7 @@ class PetClaim():
             owner.PetAmount-=1
             pet.OwnerID = 0
             self.session.commit()
-            await self.bot.say("<@{0}> has abandoned <@{1}>, in the rain, alone. What a dick.".format(owner.OwnerID,  pet.PetID))
+            await self.bot.say("{0} has abandoned {1}, in the rain, alone.".format(owner.OwnerFriendlyName,  pet.PetFriendlyName))
 
     @commands.command(pass_context=True)
     async def pets(self, ctx):
@@ -137,6 +140,23 @@ class PetClaim():
          
         await self.bot.say("<@{}>'s Pets are: \n{}".format(ctx.message.author.id, str.join("\n", pets)))
 
+    @commands.command(pass_context=True)
+    async def flee(self, ctx):
+        try:
+            pet = self.session.query(Pet).filter(Pet.PetID == ctx.message.author.id).one()
+            owner = self.session.query(Owner).filter(Owner.OwnerID == pet.OwnerID).one()
+        except Exception as e:
+            print(e)
+            await self.bot.say("You are not currently owned by anyone.")
+            return
+
+        pet.OwnerID = 0
+        owner.PetAmount -= 1
+        self.session.commit()
+        
+        await self.bot.say("You have ran away from {}. You are free.".format(owner.OwnerFriendlyName))
+        
+        self.session.close()
 
 def setup(bot):
     bot.add_cog(PetClaim(bot))
