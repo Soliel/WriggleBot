@@ -47,7 +47,7 @@ async def reload(extension_name : str):
 	except (AttributeError, ImportError) as e:
 		await bot.say("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
 		return
-	await bot.say('{} Reloaded.'.format(extension_name));
+	await bot.say('{} Reloaded.'.format(extension_name))
 
 
-bot.run("MjEwNTU3NjQ5ODE5OTI2NTMx.CoRrpw.XfSfukjWI1bJtwmGs8LiqtXtkvk")
+bot.run("token")
